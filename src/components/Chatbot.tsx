@@ -44,7 +44,7 @@ export default function ChatbotUI({ id }: { id: string }) {
         parts: [{ text: msg.text }]
       }))
       console.log(HistoryObject);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/ask`, {
+      const response = await fetch(`https://chatbot-service-web.vercel.app/api/ask`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
