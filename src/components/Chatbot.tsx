@@ -39,7 +39,7 @@ export default function ChatbotUI({ id }: { id: string }) {
 
     try {
       console.log("this is id",id);
-      let HistoryObject = messages.map(msg => ({
+      const HistoryObject = messages.map(msg => ({
         role: msg.sender === 'user' ? 'user' : 'model',
         parts: [{ text: msg.text }]
       }))
