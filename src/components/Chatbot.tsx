@@ -1,5 +1,8 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Send } from 'lucide-react';
@@ -38,13 +41,13 @@ export default function ChatbotUI({ id }: { id: string }) {
     setLoading(true);
 
     try {
-      console.log("this is id",id);
+      console.log("this is id", id);
       const HistoryObject = messages.map(msg => ({
         role: msg.sender === 'user' ? 'user' : 'model',
         parts: [{ text: msg.text }]
-      }))
+      }));
       console.log(HistoryObject);
-      const response = await fetch(`https://chatbot-service-web.vercel.app/api/ask`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/ask`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -52,7 +55,7 @@ export default function ChatbotUI({ id }: { id: string }) {
         body: JSON.stringify({
           id,
           prompt: inputValue,
-          messages:HistoryObject
+          messages: HistoryObject
         })
       });
 
@@ -86,7 +89,7 @@ export default function ChatbotUI({ id }: { id: string }) {
         Chatbot Assistant
       </div>
 
-      {/* Chat Messages (takes up available space) */}
+      {/* Chat Messages */}
       <div className="flex-grow overflow-y-auto p-4 space-y-4">
         {messages.map((msg, index) => (
           <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -96,7 +99,11 @@ export default function ChatbotUI({ id }: { id: string }) {
                   : 'bg-gray-200 text-gray-800 rounded-bl-none'
                 }`}
             >
-              {msg.text}
+              {msg.sender === 'bot' ? (
+                <ReactMarkdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]}>{msg.text || ''}</ReactMarkdown>
+              ) : (
+                msg.text
+              )}
             </div>
           </div>
         ))}
@@ -110,7 +117,7 @@ export default function ChatbotUI({ id }: { id: string }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Chat Input (fixed at the bottom) */}
+      {/* Chat Input */}
       <div className="p-4 border-t border-gray-300 flex items-center bg-white shadow-md">
         <Input
           value={inputValue}
