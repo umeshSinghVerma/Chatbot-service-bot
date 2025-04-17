@@ -1,8 +1,25 @@
-'use client'
 import ChatbotUI from '@/components/Chatbot';
-import { useParams } from 'next/navigation';
 
-export default function Page() {
-  const params = useParams();
-  return <ChatbotUI id={params.id as string} />
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
+async function getChatbotInfo(id:string){
+  const response = await fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/getChatbotInfo?id=${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },  
+  });
+  const data = await response.json();
+  return data.chatbot;
+}
+
+
+export default async function Page({ params }: PageProps) {
+  const { id } = await params;
+  const chatbotData = await getChatbotInfo(id);
+  return <ChatbotUI id={id} data={chatbotData} />;
 }

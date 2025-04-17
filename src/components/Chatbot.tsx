@@ -20,7 +20,7 @@ const LoadingDots = () => (
   </div>
 );
 
-export default function ChatbotUI({ id }: { id: string }) {
+export default function ChatbotUI({ id, data }: { id: string, data: { name: string } }) {
   const [messages, setMessages] = useState<Message[]>([
     { sender: 'bot', text: 'Hello! How can I assist you today? 😊' }
   ]);
@@ -41,7 +41,6 @@ export default function ChatbotUI({ id }: { id: string }) {
     setLoading(true);
 
     try {
-      console.log("this is id", id);
       const HistoryObject = messages.map(msg => ({
         role: msg.sender === 'user' ? 'user' : 'model',
         parts: [{ text: msg.text }]
@@ -86,7 +85,7 @@ export default function ChatbotUI({ id }: { id: string }) {
     <div className="flex flex-col absolute inset-0 bg-gray-100">
       {/* Chat Header */}
       <div className="bg-blue-600 text-white p-4 font-semibold text-lg flex justify-center items-center shadow-md">
-        Chatbot Assistant
+        {data.name}
       </div>
 
       {/* Chat Messages */}
@@ -95,8 +94,8 @@ export default function ChatbotUI({ id }: { id: string }) {
           <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={`p-3 max-w-xs md:max-w-sm rounded-2xl text-sm shadow ${msg.sender === 'user'
-                  ? 'bg-blue-500 text-white rounded-br-none'
-                  : 'bg-gray-200 text-gray-800 rounded-bl-none'
+                ? 'bg-blue-500 text-white rounded-br-none'
+                : 'bg-gray-200 text-gray-800 rounded-bl-none'
                 }`}
             >
               {msg.sender === 'bot' ? (
