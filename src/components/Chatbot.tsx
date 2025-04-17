@@ -124,6 +124,7 @@ export default function ChatbotUI({ id, data }: { id: string, data: { name: stri
           onKeyDown={handleKeyPress}
           placeholder="Type your message..."
           className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          spellCheck={false}
         />
         <Button onClick={handleSend} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
           <Send className="h-5 w-5" />
