@@ -1,11 +1,5 @@
 import ChatbotUI from '@/components/Chatbot';
 
-type PageProps = {
-  params: {
-    id: string;
-  };
-};
-
 async function getChatbotInfo(id:string){
   const response = await fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/getChatbotInfo?id=${id}`, {
     method: 'GET',
@@ -18,7 +12,7 @@ async function getChatbotInfo(id:string){
 }
 
 
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const chatbotData = await getChatbotInfo(id);
   return <ChatbotUI id={id} data={chatbotData} />;
